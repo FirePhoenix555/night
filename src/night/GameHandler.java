@@ -9,11 +9,12 @@ import javax.swing.JPanel;
 public class GameHandler extends JPanel implements Runnable {
 	private static final long serialVersionUID = 1L;
 	
-	final int width = 100, height = 100;
+	final int width = 707, height = 500;
 	final int fps = 30; // how often the game updates
 	
 	Thread gameThread;
 	KeyHandler kh = new KeyHandler();
+	MouseHandler mh = new MouseHandler();
 	
 	Player player;
 	
@@ -21,6 +22,7 @@ public class GameHandler extends JPanel implements Runnable {
 		setPreferredSize(new Dimension(width, height));
 		setDoubleBuffered(true);
 		addKeyListener(kh);
+		addMouseListener(mh);
 		setFocusable(true);
 		
 		initialize();
@@ -31,7 +33,7 @@ public class GameHandler extends JPanel implements Runnable {
 	
 	public void initialize() {
 		this.setBackground(Color.black);
-		player = new Player(0, 0, 5, 5); // x, y, w, h
+		player = new Player(width/2, height/2, 15, 15); // x, y, w, h
 	}
 
 	@Override

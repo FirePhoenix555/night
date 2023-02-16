@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 public class Player extends GameObject {
-	final private int speed = 5; // how fast the player moves
+	final private int speed = 10; // how fast the player moves
 	final private int fps = 10; // how often the player moves
 	final private double moveInterval = 1000000000/fps;
 	private double nextMoveTime;
@@ -31,12 +31,19 @@ public class Player extends GameObject {
 		if (left) dx = -speed;
 		if (right) dx = speed;
 		
+		if (dx != 0 && dy != 0) {
+			// Moving diagonally shouldn't let you speed up
+			dx /= Math.sqrt(2);
+			dy /= Math.sqrt(2);
+		}
+		
 		x += dx;
 		y += dy;
 	}
 	
 	@Override
 	public void draw(Graphics2D g) {
-		
+		g.setColor(Color.red);
+		g.fillRect(x, y, width, height);
 	}
 }

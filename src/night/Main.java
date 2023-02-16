@@ -6,9 +6,8 @@ import javax.swing.JFrame;
 //^ very helpful!
 
 public class Main {
-
 	public static void main(String[] args) {
-		JFrame window = new JFrame("Game");
+		JFrame window = new JFrame("Night");
 		
 		GameHandler gh = new GameHandler();
 		window.add(gh);
@@ -19,5 +18,4 @@ public class Main {
 		window.setLocationRelativeTo(null);
 		window.setResizable(false);
 	}
-
 }
