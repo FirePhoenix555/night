@@ -58,7 +58,8 @@ public class GameHandler extends JPanel implements Runnable {
 	}
 	
 	private void update() {
-		player.update(kh);
+		mh.updateMouseLocation(this);
+		player.update(kh, mh);
 	}
 	
 	@Override

@@ -4,23 +4,31 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 public class Player extends GameObject {
-	final private int speed = 10; // how fast the player moves
-	final private int fps = 10; // how often the player moves
+	final private static int speed = 10; // how fast the player moves
+	final private static int fps = 10; // how often the player moves
 	final private double moveInterval = 1000000000/fps;
 	private double nextMoveTime;
+	
+	public Flashlight f;
 	
 	public Player(int x_, int y_, int width_, int height_) {
 		super(x_, y_, width_, height_);
 		nextMoveTime = System.nanoTime() + moveInterval;
+		
+		f = new Flashlight(this, 0, 0);
 	}
 	
-	public void update(KeyHandler kh) {
+	public void update(KeyHandler kh, MouseHandler mh) {
 		double remainingTime = (nextMoveTime - System.nanoTime())/1000000;
 		
 		if (remainingTime <= 0) {
 			move(kh.up, kh.left, kh.down, kh.right);
 			nextMoveTime += moveInterval;
 		}
+		
+		f.setPos(mh.x, mh.y);
+		if (mh.mouseHeld) f.updateRadius(1);
+		else f.updateRadius(-1);
 	}
 	
 	private void move(boolean up, boolean left, boolean down, boolean right) {
@@ -45,5 +53,7 @@ public class Player extends GameObject {
 	public void draw(Graphics2D g) {
 		g.setColor(Color.red);
 		g.fillRect(x, y, width, height);
+		
+		f.draw(g);
 	}
 }
