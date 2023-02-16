@@ -1,4 +1,4 @@
-package game_template;
+package night;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;

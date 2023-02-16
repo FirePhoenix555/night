@@ -6,4 +6,5 @@
  *
  */
 module night {
+	requires java.desktop;
 }

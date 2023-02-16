@@ -1,4 +1,4 @@
-package game_template;
+package night;
 
 import java.awt.Color;
 import java.awt.Graphics;
