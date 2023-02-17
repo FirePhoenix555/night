@@ -11,8 +11,8 @@ public class Player extends GameObject {
 	
 	public Flashlight f;
 	
-	public Player(int x_, int y_, int width_, int height_) {
-		super(x_, y_, width_, height_);
+	public Player(int x_, int y_) {
+		super(x_, y_, 15, 15);
 		nextMoveTime = System.nanoTime() + moveInterval;
 		
 		f = new Flashlight(this, 0, 0);

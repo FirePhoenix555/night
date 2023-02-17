@@ -3,6 +3,7 @@ package night;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.ArrayList;
 import java.awt.Dimension;
 import javax.swing.JPanel;
 
@@ -17,6 +18,7 @@ public class GameHandler extends JPanel implements Runnable {
 	MouseHandler mh = new MouseHandler();
 	
 	Player player;
+	ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 	
 	public GameHandler() {
 		setPreferredSize(new Dimension(width, height));
@@ -33,7 +35,11 @@ public class GameHandler extends JPanel implements Runnable {
 	
 	public void initialize() {
 		this.setBackground(Color.black);
-		player = new Player(width/2, height/2, 15, 15); // x, y, w, h
+		player = new Player(width/2, height/2);
+		
+		for (int i = 0; i < 10; i++) { // initial spawning of enemies. TODO change later
+			enemies.add(new Enemy());
+		}
 	}
 
 	@Override
@@ -60,6 +66,10 @@ public class GameHandler extends JPanel implements Runnable {
 	private void update() {
 		mh.updateMouseLocation(this);
 		player.update(kh, mh);
+		
+		for (Enemy e : enemies) {
+			e.update(player);
+		}
 	}
 	
 	@Override
@@ -67,6 +77,10 @@ public class GameHandler extends JPanel implements Runnable {
 		super.paintComponent(g_);
 		
 		Graphics2D g = (Graphics2D) g_;
+		
+		for (Enemy e : enemies) {
+			e.draw(g);
+		}
 		
 		player.draw(g);
 	
