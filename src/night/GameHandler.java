@@ -65,10 +65,17 @@ public class GameHandler extends JPanel implements Runnable {
 	
 	private void update() {
 		mh.updateMouseLocation(this);
-		player.update(kh, mh);
+//		player.update(kh, mh);
+		player.update(this);
 		
-		for (Enemy e : enemies) {
-			e.update(player);
+		for (Enemy e : enemies) { 
+//			e.update(player);
+			e.update(this);
+		}
+		
+		for (int i = enemies.size() - 1; i >= 0; i--) {
+			Enemy e = enemies.get(i);
+			if (e.destroyed) enemies.remove(e);
 		}
 	}
 	

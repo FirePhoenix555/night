@@ -7,6 +7,8 @@ public class GameObject {
 	public int x, y;
 	public int width, height;
 	
+	public float health = 1;
+	
 	public GameObject(int x_, int y_, int width_, int height_) {
 		x = x_;
 		y = y_;

@@ -18,15 +18,15 @@ public class Player extends GameObject {
 		f = new Flashlight(this, 0, 0);
 	}
 	
-	public void update(KeyHandler kh, MouseHandler mh) {
+	public void update(GameHandler g) {
 		double remainingTime = (nextMoveTime - System.nanoTime())/1000000;
 		
 		if (remainingTime <= 0) {
-			move(kh.up, kh.left, kh.down, kh.right);
+			move(g.kh.up, g.kh.left, g.kh.down, g.kh.right);
 			nextMoveTime += moveInterval;
 		}
 		
-		f.update(mh.x, mh.y, mh.mouseHeld);
+		f.update(g.mh.x, g.mh.y, g.mh.mouseHeld, g.enemies);
 	}
 	
 	private void move(boolean up, boolean left, boolean down, boolean right) {

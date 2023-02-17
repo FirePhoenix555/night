@@ -1,16 +1,21 @@
 package night;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.util.Random;
 
 public class Enemy extends GameObject {
 	
 	private static int speed = 5;
+	private static float dmg = 0.01f;
+	
+	public boolean destroyed = false;
 	
 	public Enemy(int x_, int y_) {
 		super(x_, y_, 10, 10);
 	}
 	
-	public Enemy(int[] pos) {
+	private Enemy(int[] pos) {
 		this(pos[0], pos[1]);
 	}
 	
@@ -36,7 +41,11 @@ public class Enemy extends GameObject {
 		
 //		System.out.println("Old: <" + dx + ", " + dy + ">");
 		
-		if (dx == 0 && dy == 0) return; // we've hit the player and no longer need to move
+		if (dx <= width && dy <= height) {
+			p.health -= dmg;
+			destroy();
+			return; // we've hit the player and no longer need to move
+		}
 		
 		double dist = Math.sqrt(dx*dx + dy*dy);
 		
@@ -51,7 +60,23 @@ public class Enemy extends GameObject {
 		y += dy;
 	}
 	
-	public void update(Player p) {
-		seek(p);
+	public void update(GameHandler g) {
+//		if (destroyed) return;
+		seek(g.player); // TODO add repelling force from other enemies (j change dx,dy)
+		
+		if (health <= 0) {
+			destroy();
+		}
+	}
+	
+	public void destroy() {
+		destroyed = true;
+	}
+	
+	@Override
+	public void draw(Graphics2D g) {
+//		if (destroyed) return;
+		g.setColor(Color.white);
+		g.fillRect(x, y, width, height);
 	}
 }
