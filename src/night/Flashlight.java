@@ -10,8 +10,7 @@ public class Flashlight extends GameObject {
 	private int radius;
 	
 	final private static float batterySpeed = 0.025f;
-	private float battery = 1; // we're going to do a thing and have this be
-							   // between 0 and 1
+	private float battery = 1; // we're going to do a thing and have this be between 0 and 1
 	private boolean on = true;
 	
 	public Flashlight(Player owner_, int x_, int y_) {
