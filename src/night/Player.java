@@ -26,9 +26,7 @@ public class Player extends GameObject {
 			nextMoveTime += moveInterval;
 		}
 		
-		f.setPos(mh.x, mh.y);
-		if (mh.mouseHeld) f.updateRadius(1);
-		else f.updateRadius(-1);
+		f.update(mh.x, mh.y, mh.mouseHeld);
 	}
 	
 	private void move(boolean up, boolean left, boolean down, boolean right) {
