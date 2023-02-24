@@ -80,6 +80,7 @@ public class Flashlight extends GameObject {
 		}
 	}
 	
+	// https://stackoverflow.com/questions/401847/circle-rectangle-collision-detection-intersection
 	private boolean intersects(GameObject g) {
 		int dx = Math.abs(g.x - x);
 		int dy = Math.abs(g.y + g.height - y);
