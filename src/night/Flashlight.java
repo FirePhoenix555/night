@@ -36,8 +36,8 @@ public class Flashlight extends GameObject {
 		
 		// The battery
 		g.setColor(Color.white);
-		g.drawRect(5, 5, 200, 20);
-		g.fillRect(5, 5, (int) (battery * 200), 20);
+		g.drawRect(5, 30, 200, 20);
+		g.fillRect(5, 30, (int) (battery * 200), 20);
 	}
 	
 	private void setPos(int x_, int y_) {

@@ -53,5 +53,9 @@ public class Player extends GameObject {
 		g.fillRect(x, y, width, height);
 		
 		f.draw(g);
+		
+		g.setColor(Color.white);
+		g.drawRect(5, 5, 200, 20);
+		g.fillRect(5, 5, (int) (health * 200), 20);
 	}
 }
