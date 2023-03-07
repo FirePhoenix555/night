@@ -59,17 +59,18 @@ public class Flashlight extends GameObject {
 		if (on) {
 			updateRadius(1);
 			
-			for (Enemy e : enemies) {
-				if (intersects(e)) {
-					e.health -= dmg;
-				}
-			}
-			
 			battery -= batterySpeed;
 			if (battery <= 0) {
 				// radius = minradius;
 				on = false;
 				battery = 0;
+				return;
+			}
+			
+			for (Enemy e : enemies) {
+				if (intersects(e)) {
+					e.health -= dmg;
+				}
 			}
 		} else {
 			battery += batterySpeed;
