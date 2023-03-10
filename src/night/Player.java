@@ -9,6 +9,10 @@ public class Player extends GameObject {
 	final private double moveInterval = 1000000000/fps;
 	private double nextMoveTime;
 	
+	final private static float healthRegen = 0.001f;
+	
+	public boolean dead = false;
+	
 	public Flashlight f;
 	
 	public Player(int x_, int y_) {
@@ -26,7 +30,14 @@ public class Player extends GameObject {
 			nextMoveTime += moveInterval;
 		}
 		
-		f.update(g.mh.x, g.mh.y, g.mh.mouseHeld, g.enemies);
+		f.update(g.mh.x, g.mh.y, g.mh.mouseHeld);
+		
+		if (health <= 0) {
+			dead = true;
+		} else {
+			health += healthRegen;
+			if (health > 1) health = 1;
+		}
 	}
 	
 	private void move(boolean up, boolean left, boolean down, boolean right) {

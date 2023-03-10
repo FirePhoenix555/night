@@ -2,37 +2,16 @@ package night;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.util.Random;
 
 public class Enemy extends GameObject {
 	
 	private static int speed = 5;
-	private static float dmg = 0.01f;
+	private static float dmg = 0.075f;
 	
 	public boolean destroyed = false;
 	
 	public Enemy(int x_, int y_) {
 		super(x_, y_, 10, 10);
-	}
-	
-	private Enemy(int[] pos) {
-		this(pos[0], pos[1]);
-	}
-	
-	public Enemy() {
-		this(genPos());
-	}
-	
-	private static int[] genPos() {
-		Random r = new Random();
-		
-		double theta = r.nextDouble() * 2 * Math.PI;
-		final double radius = 200;
-		
-		int x = (int) (radius * Math.cos(theta));
-		int y = (int) (radius * Math.sin(theta));
-		
-		return new int[]{x + 250, y + 250};
 	}
 	
 	private double[] seek(GameObject g) { // Moves directly toward the player

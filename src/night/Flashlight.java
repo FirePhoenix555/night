@@ -2,7 +2,6 @@ package night;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.util.ArrayList;
 
 public class Flashlight extends GameObject {
 //	private Player owner;
@@ -10,11 +9,12 @@ public class Flashlight extends GameObject {
 	final private static int minradius = 5, maxradius = 30;
 	private int radius;
 	
-	final private static float batterySpeed = 0.025f;
+	final private static float batteryUseSpeed = 0.0125f;
+	final private static float batteryRegenSpeed = 2f * batteryUseSpeed;
 	private float battery = 1; // we're going to do a thing and have this be between 0 and 1
-	private boolean on = true;
+	public boolean on = true;
 	
-	final private static float dmg = 0.3f;
+	final public static float dmg = 0.3f;
 	
 	public Flashlight(Player owner_, int x_, int y_) {
 		super(x_, y_, minradius*2, minradius*2);
@@ -51,38 +51,31 @@ public class Flashlight extends GameObject {
 		else if (radius > maxradius) radius = maxradius;
 	}
 	
-	public void update(int x_, int y_, boolean mouseHeld, ArrayList<Enemy> enemies) {
+	public void update(int x_, int y_, boolean mouseHeld) {
 		setPos(x_, y_);
-		
-		if (battery > 0) on = mouseHeld;
+		on = mouseHeld;
 		
 		if (on) {
-			updateRadius(1);
-			
-			battery -= batterySpeed;
+			battery -= batteryUseSpeed;
 			if (battery <= 0) {
 				// radius = minradius;
 				on = false;
 				battery = 0;
+				updateRadius(-2);
 				return;
 			}
-			
-			for (Enemy e : enemies) {
-				if (intersects(e)) {
-					e.health -= dmg;
-				}
-			}
+			updateRadius(1);
 		} else {
-			battery += batterySpeed;
-			updateRadius(-2);
+			battery += batteryRegenSpeed;
 			if (battery > 1) {
 				battery = 1;
 			}
+			updateRadius(-2);
 		}
 	}
 	
 	// https://stackoverflow.com/questions/401847/circle-rectangle-collision-detection-intersection
-	private boolean intersects(GameObject g) {
+	public boolean intersects(GameObject g) {
 		int dx = Math.abs(g.x - x);
 		int dy = Math.abs(g.y + g.height - y);
 

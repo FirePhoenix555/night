@@ -13,9 +13,12 @@ public class GameHandler extends JPanel implements Runnable {
 	final int width = 707, height = 500;
 	final int fps = 30; // how often the game updates
 	
+	private boolean ended = false;
+	
 	Thread gameThread;
 	KeyHandler kh = new KeyHandler();
 	MouseHandler mh = new MouseHandler();
+	EnemyHandler eh = new EnemyHandler();
 	
 	Player player;
 	ArrayList<Enemy> enemies = new ArrayList<Enemy>();
@@ -36,10 +39,6 @@ public class GameHandler extends JPanel implements Runnable {
 	public void initialize() {
 		this.setBackground(Color.black);
 		player = new Player(width/2, height/2);
-		
-		for (int i = 0; i < 10; i++) { // initial spawning of enemies. TODO change later
-			enemies.add(new Enemy());
-		}
 	}
 
 	@Override
@@ -64,19 +63,20 @@ public class GameHandler extends JPanel implements Runnable {
 	}
 	
 	private void update() {
+		if (ended) {
+			return;
+		}
+		
+		if (player.dead) {
+			ended = true;
+			return;
+		}
+		
 		mh.updateMouseLocation(this);
 //		player.update(kh, mh);
 		player.update(this);
 		
-		for (Enemy e : enemies) { 
-//			e.update(player);
-			e.update(this);
-		}
-		
-		for (int i = enemies.size() - 1; i >= 0; i--) {
-			Enemy e = enemies.get(i);
-			if (e.destroyed) enemies.remove(e);
-		}
+		eh.update(this);
 	}
 	
 	@Override
@@ -85,9 +85,13 @@ public class GameHandler extends JPanel implements Runnable {
 		
 		Graphics2D g = (Graphics2D) g_;
 		
-		for (Enemy e : enemies) {
-			e.draw(g);
+		if (ended) {
+			this.setBackground(Color.red);
+			return;
 		}
+		
+		
+		eh.draw(g);
 		
 		player.draw(g);
 	
