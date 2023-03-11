@@ -55,7 +55,7 @@ public class Enemy extends GameObject {
 		
 		
 
-		forces[0] = seek(g.player); // TODO add repelling force from other enemies (j change dx,dy)
+		forces[0] = seek(g.player);
 		
 		// we're going to deal w forces here
 		// seek() returns a force float[2]

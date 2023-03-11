@@ -5,9 +5,7 @@ import java.awt.Graphics2D;
 
 public class Player extends GameObject {
 	final private static int speed = 10; // how fast the player moves
-	final private static int fps = 10; // how often the player moves
-	final private double moveInterval = 1000000000/fps;
-	private double nextMoveTime;
+	final private static float fps = 10; // how often the player moves
 	
 	final private static float healthRegen = 0.001f;
 	
@@ -15,22 +13,27 @@ public class Player extends GameObject {
 	
 	public Flashlight f;
 	
-	public Player(int x_, int y_) {
+	private GameHandler g;
+	
+	public Player(int x_, int y_, GameHandler g_) {
 		super(x_, y_, 15, 15);
-		nextMoveTime = System.nanoTime() + moveInterval;
+		
+		g = g_;
 		
 		f = new Flashlight(this, 0, 0);
+		
+		t = new Timer(fps, g, this);
 	}
 	
-	public void update(GameHandler g) {
-		double remainingTime = (nextMoveTime - System.nanoTime())/1000000;
+	@Override
+	public void onTimer() {
+		move(g.kh.up, g.kh.left, g.kh.down, g.kh.right);
+	}
+	
+	public void update() {
+		t.update();
 		
-		if (remainingTime <= 0) {
-			move(g.kh.up, g.kh.left, g.kh.down, g.kh.right);
-			nextMoveTime += moveInterval;
-		}
-		
-		f.update(g.mh.x, g.mh.y, g.mh.mouseHeld);
+		f.update(g.mh);
 		
 		if (health <= 0) {
 			dead = true;

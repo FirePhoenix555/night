@@ -13,12 +13,18 @@ public class GameHandler extends JPanel implements Runnable {
 	final int width = 707, height = 500;
 	final int fps = 30; // how often the game updates
 	
-	private boolean ended = false;
+	private boolean paused = false;
 	
 	Thread gameThread;
 	KeyHandler kh = new KeyHandler();
 	MouseHandler mh = new MouseHandler();
 	EnemyHandler eh = new EnemyHandler();
+	
+	SceneManager sm = new SceneManager(this);
+	
+	
+//	//testing TODO
+//	TextHandler t = new TextHandler("Hello there. Did you know I'm working text now?", width/2, height/2, this);
 	
 	Player player;
 	ArrayList<Enemy> enemies = new ArrayList<Enemy>();
@@ -38,7 +44,8 @@ public class GameHandler extends JPanel implements Runnable {
 	
 	public void initialize() {
 		this.setBackground(Color.black);
-		player = new Player(width/2, height/2);
+		player = new Player(width/2, height/2, this);
+		// sm.initialize();
 	}
 
 	@Override
@@ -63,20 +70,39 @@ public class GameHandler extends JPanel implements Runnable {
 	}
 	
 	private void update() {
-		if (ended) {
+		if (paused) {
 			return;
 		}
 		
-		if (player.dead) {
-			ended = true;
-			return;
+		Scene s = sm.getScene();
+		
+		if (s == Scene.BEDROOM || s == Scene.HALLWAY || s == Scene.KITCHEN) {
+			mh.updateMouseLocation(this);
+	//		player.update(kh, mh);
+			player.update();
+			
+			eh.update(this);
+			
+	//		// testing TODO
+	//		t.update();
+			
+			if (player.dead) {
+//				paused = true;
+				sm.setScene(Scene.LOSS);
+				return;
+			}
+		} else if (s == Scene.MENU) {
+			if (mh.mouseHeld) {
+				sm.setScene(Scene.T1);
+				mh.mouseHeld = false;
+			}
+		} else if (s == Scene.LOSS) {
+			if (mh.mouseHeld) {
+				sm.setScene(Scene.MENU);
+				initialize();
+				mh.mouseHeld = false;
+			}
 		}
-		
-		mh.updateMouseLocation(this);
-//		player.update(kh, mh);
-		player.update(this);
-		
-		eh.update(this);
 	}
 	
 	@Override
@@ -85,16 +111,8 @@ public class GameHandler extends JPanel implements Runnable {
 		
 		Graphics2D g = (Graphics2D) g_;
 		
-		if (ended) {
-			this.setBackground(Color.red);
-			return;
-		}
+		sm.drawScene(this, g);
 		
-		
-		eh.draw(g);
-		
-		player.draw(g);
-	
 		g.dispose();
 	}
 }

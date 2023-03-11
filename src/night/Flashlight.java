@@ -51,9 +51,9 @@ public class Flashlight extends GameObject {
 		else if (radius > maxradius) radius = maxradius;
 	}
 	
-	public void update(int x_, int y_, boolean mouseHeld) {
-		setPos(x_, y_);
-		on = mouseHeld;
+	public void update(MouseHandler mh) {
+		setPos(mh.x, mh.y);
+		on = mh.mouseHeld;
 		
 		if (on) {
 			battery -= batteryUseSpeed;
@@ -61,6 +61,7 @@ public class Flashlight extends GameObject {
 				// radius = minradius;
 				on = false;
 				battery = 0;
+				mh.mouseHeld = false;
 				updateRadius(-2);
 				return;
 			}

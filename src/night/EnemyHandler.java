@@ -7,9 +7,12 @@ import java.util.Random;
 public class EnemyHandler {
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 	
-	final private static double spawnRate = 0.03;
+	final private static double initialSpawnRate = 0.03;
+	final private static double spawnRateRate = 0.000005;
 	
 	private Random r = new Random();
+	
+	private double spawnRate = initialSpawnRate;
 	
 	public EnemyHandler() {
 		
@@ -36,6 +39,8 @@ public class EnemyHandler {
 			Enemy e = enemies.get(i);
 			if (e.destroyed) enemies.remove(e);
 		}
+		
+		spawnRate += spawnRateRate;
 	}
 	
 	void draw(Graphics2D g) {

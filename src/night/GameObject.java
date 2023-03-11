@@ -8,6 +8,7 @@ public class GameObject {
 	public int width, height;
 	
 	public float health = 1;
+	protected Timer t;
 	
 	public GameObject(int x_, int y_, int width_, int height_) {
 		x = x_;
@@ -19,5 +20,13 @@ public class GameObject {
 	public void draw(Graphics2D g) {
 		g.setColor(Color.white);
 		g.fillRect(x, y, width, height);
+	}
+	
+	public void onTimer() {
+		// 
+	}
+	
+	public void resetTimer() {
+		t = null;
 	}
 }
