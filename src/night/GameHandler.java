@@ -21,6 +21,7 @@ public class GameHandler extends JPanel implements Runnable {
 	EnemyHandler eh = new EnemyHandler();
 	
 	SceneManager sm = new SceneManager(this);
+	SoundManager sd = new SoundManager();
 	
 	Player player;
 	ArrayList<Enemy> enemies = new ArrayList<Enemy>();
