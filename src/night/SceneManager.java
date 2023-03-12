@@ -1,6 +1,7 @@
 package night;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 
 public class SceneManager {
@@ -111,6 +112,7 @@ public class SceneManager {
 			if (!t.text.equals(introSequence[currentString])) {
 				t = new TextHandler(gh, introSequence[currentString], gh.width/2, gh.height/2);
 				t.setColor(Color.white);
+				t.setFont(new Font("Courier New", Font.PLAIN, 15));
 			}
 			
 			t.update();
@@ -158,6 +160,7 @@ public class SceneManager {
 				if (!t.text.equals(winSequence[currentString])) {
 					t = new TextHandler(gh, winSequence[currentString], gh.width/2, gh.height/2);
 					t.setColor(Color.black);
+					t.setFont(new Font("Courier New", Font.PLAIN, 15));
 				}
 				
 				t.update();

@@ -1,12 +1,14 @@
 package night;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 
 public class TextHandler extends GameObject {
 	public String text;
 	public int x, y;
 	private Color c = Color.white;
+	private Font f;
 	final private static int maxWidth = 25; // in CHARACTERS not pixels
 
 	private String displayString = "";
@@ -33,10 +35,14 @@ public class TextHandler extends GameObject {
 		c = c_;
 	}
 	
+	public void setFont(Font f_) {
+		f = f_;
+	}
+	
 	@Override
 	public void draw(Graphics2D g) {
 		g.setColor(c);
-		
+		g.setFont(f);
 		
 		// https://stackoverflow.com/questions/4413132/problems-with-newline-in-graphics2d-drawstring
 		int y_ = y;
