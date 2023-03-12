@@ -20,6 +20,15 @@ public class SceneManager {
 			"C",
 			"Hello I'm testing to see if this is going to work as intended."
 	};
+	final private static String[] winSequence = new String[] {
+			"You got your water!",
+			"Nice job staying hydrated.",
+			"I don't really know what to say now but gj!!",
+			"Aaaaaaaaaaaaaa aaaaaaaaaaaa aaaaaaaaaaaaaaaaa.",
+			"B",
+			"C",
+			"Hello I'm testing to see if this is going to work as intended."
+	};
 	private int currentString;
 	
 	private TextHandler t;
@@ -52,13 +61,24 @@ public class SceneManager {
 		
 		setWalls(s);
 		
+		currentbg = 1;
+		
 		if (s == Scene.T1) {
 			temptime = System.nanoTime() + transitionTime;
+			transitioning = true;
 //			System.out.println(currentbg);
 		}
 		if (s == Scene.INTRO) {
 			currentString = 0;
 			t = new TextHandler(gh, "", 0, 0);
+		}
+		if (s == Scene.WIN) {
+			currentString = 0;
+			t = new TextHandler(gh, "", 0, 0);
+		}
+		if (s == Scene.T2) {
+			temptime = System.nanoTime() + transitionTime;
+			transitioning = true;
 		}
 		
 		gh.eh.destroyAll();
@@ -118,6 +138,31 @@ public class SceneManager {
 		} else if (currentScene == Scene.WIN) {
 			gh.setBackground(Color.green);
 			
+			if (gh.mh.mouseHeld) {
+				currentString++;
+				gh.mh.mouseHeld = false;
+				
+				if (currentString >= winSequence.length) {
+					
+					t.resetTimer();
+					
+					if (currentString >= winSequence.length + 1) {
+						setScene(Scene.T2);
+						gh.mh.mouseHeld = false;
+					}
+					
+					return;
+				}
+			}
+			if (currentString < winSequence.length) {
+				if (!t.text.equals(winSequence[currentString])) {
+					t = new TextHandler(gh, winSequence[currentString], gh.width/2, gh.height/2);
+					t.setColor(Color.black);
+				}
+				
+				t.update();
+				t.draw(g);
+			}
 		} else if (currentScene == Scene.LOSS) {
 			gh.setBackground(Color.red);
 		} else if (currentScene == Scene.T1) {
@@ -134,6 +179,19 @@ public class SceneManager {
 			temptime += transitionTime;
 //			System.out.println(currentbg);
 			gh.setBackground(new Color(currentbg, currentbg, currentbg));
+		} else if (currentScene == Scene.T2) {
+			double remainingTime = (temptime - System.nanoTime())/1000000;
+			if (remainingTime <= 0) {
+				currentbg -= 2.5/255f;
+				if (currentbg <= 0) {
+					gh.initialize();
+//					transitioning = false;
+					return;
+				}
+			}
+			
+			temptime += transitionTime;
+			gh.setBackground(new Color(1-currentbg, 1, 1-currentbg));
 		}
 	}
 	

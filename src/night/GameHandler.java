@@ -21,6 +21,7 @@ public class GameHandler extends JPanel implements Runnable {
 	EnemyHandler eh = new EnemyHandler();
 	
 	SceneManager sm = new SceneManager(this);
+	SoundManager sd = new SoundManager();
 	
 	Player player;
 	ArrayList<Enemy> enemies = new ArrayList<Enemy>();
@@ -129,11 +130,11 @@ public class GameHandler extends JPanel implements Runnable {
 				mh.mouseHeld = false;
 			}
 		} else if (s == Scene.WIN) {
-			if (mh.mouseHeld) {
-				sm.setScene(Scene.MENU);
-				initialize();
-				mh.mouseHeld = false;
-			}
+//			if (mh.mouseHeld) {
+//				sm.setScene(Scene.MENU);
+//				initialize();
+//				mh.mouseHeld = false;
+//			}
 		}
 	}
 	
