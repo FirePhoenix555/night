@@ -13,34 +13,45 @@ public class SceneManager {
 	
 	final private static String[] introSequence = new String[] {
 			"This is you.",
-			"Hello",
-			"Testing",
-			"Aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+			"Hello.",
+			"Testing.",
+			"Aaaaaaaaaaaaaa aaaaaaaaaaaa aaaaaaaaaaaaaaaaa.",
 			"B",
-			"C"
+			"C",
+			"Hello I'm testing to see if this is going to work as intended."
 	};
 	private int currentString;
 	
 	private TextHandler t;
 	
-	public SceneManager(GameHandler g) {
-		initialize(g);
+	private GameHandler g;
+	
+	public SceneManager(GameHandler g_) {
+		initialize(g_);
 	}
 	
-	public void initialize(GameHandler g) {
+	public void initialize(GameHandler g_) {
 		currentScene = Scene.MENU;
 		currentString = 0;
 		temptime = 0;
 		currentbg = 1;
 		transitioning = false;
-		t = new TextHandler("", g.width/2, g.height/2, g);
+		t = new TextHandler("", 0, 0, null);
+		g = g_;
 	}
 	
 	public void setScene(Scene s) {
 		currentScene = s;
+		
 		if (s == Scene.T1) {
 			temptime = System.nanoTime() + transitionTime;
 		}
+		if (s == Scene.INTRO) {
+			currentString = 0;
+			t = new TextHandler("", 0, 0, null);
+		}
+		
+		g.eh.destroyAll();
 	}
 	
 	public Scene getScene() {
@@ -80,13 +91,19 @@ public class SceneManager {
 		} else if (currentScene == Scene.BEDROOM) {
 			drawRoom(Scene.BEDROOM, gh, gp);
 			
+			gh.bed.draw(gp);
+			
 			gh.eh.draw(gp);
 			gh.player.draw(gp);
 			
 		} else if (currentScene == Scene.HALLWAY) {
 			
 		} else if (currentScene == Scene.KITCHEN) {
+			drawRoom(Scene.KITCHEN, gh, gp);
 			
+			if (!gh.hasWater) gh.water.draw(gp);
+			gh.eh.draw(gp);
+			gh.player.draw(gp);
 		} else if (currentScene == Scene.WIN) {
 			gh.setBackground(Color.green);
 			
@@ -98,6 +115,7 @@ public class SceneManager {
 				currentbg -= 1/255f;
 				if (currentbg <= 0) {
 					setScene(Scene.INTRO);
+					transitioning = false;
 					return;
 				}
 			}
@@ -112,10 +130,12 @@ public class SceneManager {
 		if (s == Scene.BEDROOM) {
 			gh.setBackground(Color.black);
 			
+			
+			
 		} else if (s == Scene.HALLWAY) {
 			
 		} else if (s == Scene.KITCHEN) {
-			
+			gh.setBackground(Color.darkGray);
 		}
 	}
 }

@@ -7,7 +7,7 @@ public class TextHandler extends GameObject {
 	public String text;
 	public int x, y;
 	private Color c = Color.white;
-	private int maxWidth = 5; // in CHARACTERS not pixels
+	final private static int maxWidth = 25; // in CHARACTERS not pixels
 
 	private String displayString = "";
 	private int currentIndex = 1;
@@ -55,39 +55,18 @@ public class TextHandler extends GameObject {
 		else {
 			displayString = text.substring(0, currentIndex);
 			
+			String temp = "";
 			
-			String[] a = displayString.split(" ");
-			String ndisplayString = "";
-			
-			
-			
-			int i = 0;
-			while (i < displayString.split(" ").length) {
-				
+			for (int i = 0; i < displayString.split(" ").length; i++) {
 				String word = displayString.split(" ")[i];
+				String[] lines = temp.split("\n");
+				String attempt = lines[lines.length-1] + " " + word;
 				
-				String[] b = ndisplayString.split("\n");
-				
-				String attempt = b[b.length-1] + " " + word;
-				String c = word;
-				if (attempt.length() > maxWidth) {
-					c += "\n";
-				}
-				ndisplayString += " " + c;
-				
-//				System.out.println(s);
-//				if (s.length() > maxWidth) {
-//					System.out.println(true);
-//					// String word = s.indexOf("");
-////					System.out.println(s.substring(0, maxWidth));
-////					System.out.println(s.substring(maxWidth));
-//					s = s.substring(0, maxWidth) + "\n" + s.substring(maxWidth);
-//					System.out.println(s);
-//				}
-//				ndisplayString += "\n" + s;
-				i++;
+				if (attempt.length() > maxWidth) temp += "\n" + word;
+				else temp += " " + word;
 			}
-			displayString = ndisplayString.substring(1);
+			
+			displayString = temp.substring(1);
 		}
 		
 		currentIndex++;

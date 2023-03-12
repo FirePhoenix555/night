@@ -22,12 +22,15 @@ public class GameHandler extends JPanel implements Runnable {
 	
 	SceneManager sm = new SceneManager(this);
 	
-	
-//	//testing TODO
-//	TextHandler t = new TextHandler("Hello there. Did you know I'm working text now?", width/2, height/2, this);
-	
 	Player player;
 	ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+	
+	GameObject water = new GameObject(25, height/2, 15, 15);
+	boolean hasWater = false;
+	// water.setTexture();
+	// or something
+	
+	GameObject bed = new GameObject(width/2 - 50/2, height/2 - 50/2, 50, 50);
 	
 	public GameHandler() {
 		setPreferredSize(new Dimension(width, height));
@@ -83,14 +86,25 @@ public class GameHandler extends JPanel implements Runnable {
 			
 			eh.update(this);
 			
-	//		// testing TODO
-	//		t.update();
-			
 			if (player.dead) {
 //				paused = true;
 				sm.setScene(Scene.LOSS);
 				return;
 			}
+		}
+		if (s == Scene.BEDROOM) {
+			if (hasWater && player.intersects(bed)) {
+				sm.setScene(Scene.WIN);
+			}
+		} else if (s == Scene.KITCHEN) { 
+			// water.update();
+			
+			if (water.intersects(player)) {
+				// System.out.println("ok");
+				hasWater = true;
+			}
+			
+			
 		} else if (s == Scene.MENU) {
 			if (mh.mouseHeld) {
 				sm.setScene(Scene.T1);

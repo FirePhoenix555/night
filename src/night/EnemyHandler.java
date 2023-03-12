@@ -19,7 +19,7 @@ public class EnemyHandler {
 	}
 	
 	void update(GameHandler g) {
-		if (r.nextDouble() < spawnRate) {
+		if (!g.player.intersects(g.bed) && r.nextDouble() < spawnRate) {
 			// spawn new enemy
 			int[] pos = genPos(Math.max(g.width, g.height) * 1.25/2);
 			enemies.add(new Enemy(pos[0], pos[1]));
@@ -33,6 +33,10 @@ public class EnemyHandler {
 			if (f.on && f.intersects(e)) {
 				e.health -= Flashlight.dmg;
 			}
+			
+			if (e.intersects(g.bed)) {
+				e.destroyed = true;
+			}
 		}
 		
 		for (int i = enemies.size() - 1; i >= 0; i--) {
@@ -43,7 +47,7 @@ public class EnemyHandler {
 		spawnRate += spawnRateRate;
 	}
 	
-	void draw(Graphics2D g) {
+	public void draw(Graphics2D g) {
 		for (Enemy e : enemies) {
 			e.draw(g);
 		}
@@ -56,5 +60,11 @@ public class EnemyHandler {
 		int y = (int) (radius * Math.sin(theta));
 		
 		return new int[]{x + 250, y + 250};
+	}
+	
+	public void destroyAll() {
+		for (Enemy e : enemies) {
+			e.destroyed = true;
+		}
 	}
 }
