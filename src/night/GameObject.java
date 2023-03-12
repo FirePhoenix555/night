@@ -10,11 +10,14 @@ public class GameObject {
 	public float health = 1;
 	protected Timer t;
 	
-	public GameObject(int x_, int y_, int width_, int height_) {
+	protected GameHandler gh;
+	
+	public GameObject(GameHandler gh_, int x_, int y_, int width_, int height_) {
 		x = x_;
 		y = y_;
 		width = width_;
 		height = height_;
+		gh = gh_;
 	}
 	
 	public void draw(Graphics2D g) {

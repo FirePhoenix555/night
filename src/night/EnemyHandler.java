@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class EnemyHandler {
-	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+	public ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 	
 	final private static double initialSpawnRate = 0.03;
 	final private static double spawnRateRate = 0.000005;
@@ -22,13 +22,13 @@ public class EnemyHandler {
 		if (!g.player.intersects(g.bed) && r.nextDouble() < spawnRate) {
 			// spawn new enemy
 			int[] pos = genPos(Math.max(g.width, g.height) * 1.25/2);
-			enemies.add(new Enemy(pos[0], pos[1]));
+			enemies.add(new Enemy(g, pos[0], pos[1]));
 		}
 		
 		Flashlight f = g.player.f;
 		
 		for (Enemy e : enemies) {
-			e.update(g);
+			e.update();
 			
 			if (f.on && f.intersects(e)) {
 				e.health -= Flashlight.dmg;

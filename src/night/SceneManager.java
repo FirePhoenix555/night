@@ -24,43 +24,51 @@ public class SceneManager {
 	
 	private TextHandler t;
 	
-	private GameHandler g;
+	private GameHandler gh;
 	
 	public SceneManager(GameHandler g_) {
-		initialize(g_);
+		gh = g_;
+		// initialize(g_);
 	}
 	
-	public void initialize(GameHandler g_) {
-		currentScene = Scene.INTRO;
+	public void initialize() {
 		currentString = 0;
 		temptime = 0;
 		currentbg = 1;
 		transitioning = false;
-		t = new TextHandler("", 0, 0, null);
-		g = g_;
+		t = new TextHandler(gh, "", 0, 0);
+		
+		setScene(Scene.MENU);
 	}
 	
 	public void setScene(Scene s) {
+		
+//		if (currentScene == Scene.BEDROOM && s == Scene.HALLWAY) {
+//			
+//		}
+		
+		
 		currentScene = s;
 		
 		setWalls(s);
 		
 		if (s == Scene.T1) {
 			temptime = System.nanoTime() + transitionTime;
+//			System.out.println(currentbg);
 		}
 		if (s == Scene.INTRO) {
 			currentString = 0;
-			t = new TextHandler("", 0, 0, null);
+			t = new TextHandler(gh, "", 0, 0);
 		}
 		
-		g.eh.destroyAll();
+		gh.eh.destroyAll();
 	}
 	
 	public Scene getScene() {
 		return currentScene;
 	}
 	
-	public void drawScene(GameHandler gh, Graphics2D gp) {
+	public void drawScene(Graphics2D g) {
 		if (currentScene == Scene.MENU) {
 			gh.setBackground(Color.white);
 			
@@ -75,35 +83,38 @@ public class SceneManager {
 				if (currentString >= introSequence.length) {
 					setScene(Scene.BEDROOM);
 					t.resetTimer();
-					gh.player = new Player(gh.width/2, gh.height/2, gh);
+					gh.player = new Player(gh, gh.width/2, gh.height/2);
 					return;
 				}
 			}
 			
 			if (!t.text.equals(introSequence[currentString])) {
-				t = new TextHandler(introSequence[currentString], gh.width/2, gh.height/2, gh);
+				t = new TextHandler(gh, introSequence[currentString], gh.width/2, gh.height/2);
 				t.setColor(Color.white);
 			}
 			
 			t.update();
-			t.draw(gp);
+			t.draw(g);
 			
 		} else if (currentScene == Scene.BEDROOM) {
-			drawRoom(Scene.BEDROOM, gh, gp);
+			drawRoom(Scene.BEDROOM, g);
 			
-			gh.bed.draw(gp);
+			gh.bed.draw(g);
 			
-			gh.eh.draw(gp);
-			gh.player.draw(gp);
+			gh.eh.draw(g);
+			gh.player.draw(g);
 			
 		} else if (currentScene == Scene.HALLWAY) {
+			drawRoom(Scene.BEDROOM, g);
 			
+			gh.eh.draw(g);
+			gh.player.draw(g);
 		} else if (currentScene == Scene.KITCHEN) {
-			drawRoom(Scene.KITCHEN, gh, gp);
+			drawRoom(Scene.KITCHEN, g);
 			
-			if (!gh.hasWater) gh.water.draw(gp);
-			gh.eh.draw(gp);
-			gh.player.draw(gp);
+			if (!gh.hasWater) gh.water.draw(g);
+			gh.eh.draw(g);
+			gh.player.draw(g);
 		} else if (currentScene == Scene.WIN) {
 			gh.setBackground(Color.green);
 			
@@ -121,46 +132,67 @@ public class SceneManager {
 			}
 			
 			temptime += transitionTime;
-			
+//			System.out.println(currentbg);
 			gh.setBackground(new Color(currentbg, currentbg, currentbg));
 		}
 	}
 	
-	private void drawRoom(Scene s, GameHandler gh, Graphics2D gp) {
+	private void drawRoom(Scene s, Graphics2D g) {
 		if (s == Scene.BEDROOM) {
 			gh.setBackground(Color.black);
 			
 			
 			for (Wall wall : gh.walls) {
-				if (wall != null) wall.draw(gp);
+				if (wall != null) wall.draw(g);
 			}
 //			gp.fillRect(0, 0, gh.width, 20);
 			
 			
 			
 		} else if (s == Scene.HALLWAY) {
+			gh.setBackground(Color.black);
+			
+			
+			for (Wall wall : gh.walls) {
+				if (wall != null) wall.draw(g);
+			}
 			
 		} else if (s == Scene.KITCHEN) {
 			gh.setBackground(Color.darkGray);
+			
+			for (Wall wall : gh.walls) {
+				if (wall != null) wall.draw(g);
+			}
 		}
 	}
 	
 	private void setWalls(Scene s) {
 		if (!(s == Scene.BEDROOM || s == Scene.HALLWAY || s == Scene.KITCHEN)) {
-			for (Wall wall : g.walls) {
-				wall = null;
+			for (int i = 0; i < gh.walls.length; i++) {
+				gh.walls[i] = null;
 			}
 			return;
 		}
 		
-		g.walls[0] = new Wall(0, 0, g.width, 20);
-		g.walls[1] = new Wall(0, g.height - 20, g.width, 20);
+		gh.walls[0] = new Wall(gh, 0, 0, gh.width, 20);
+		gh.walls[1] = new Wall(gh, 0, gh.height - 20, gh.width, 20);
 		
 		if (s == Scene.BEDROOM) {
-			g.walls[2] = new Wall(0, 0, 20, g.height);
-			g.walls[2].setDoor(0, g.height/2 - 50/2, 20, 50, Scene.HALLWAY);
+			gh.walls[2] = new Wall(gh, 0, 0, 20, gh.height);
+			gh.walls[2].setDoor(0, gh.height/2 - 50/2, 20, 50, Scene.HALLWAY);
 			
-			g.walls[3] = new Wall(g.width - 20, 0, 20, g.height);
+			gh.walls[3] = new Wall(gh, gh.width - 20, 0, 20, gh.height);
+		} else if (s == Scene.HALLWAY) {
+			gh.walls[2] = new Wall(gh, 0, 0, 20, gh.height);
+			gh.walls[2].setDoor(0, gh.height/2 - 50/2, 20, 50, Scene.KITCHEN);
+			
+			gh.walls[3] = new Wall(gh, gh.width - 20, 0, 20, gh.height);
+			gh.walls[3].setDoor(gh.width - 20, gh.height/2 - 50/2, 20, 50, Scene.BEDROOM);
+		} else if (s == Scene.KITCHEN) {
+			gh.walls[2] = new Wall(gh, 0, 0, 20, gh.height);
+			
+			gh.walls[3] = new Wall(gh, gh.width - 20, 0, 20, gh.height);
+			gh.walls[3].setDoor(gh.width - 20, gh.height/2 - 50/2, 20, 50, Scene.HALLWAY);
 		}
 	}
 }

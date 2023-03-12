@@ -25,12 +25,12 @@ public class GameHandler extends JPanel implements Runnable {
 	Player player;
 	ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 	
-	GameObject water = new GameObject(25, height/2, 15, 15);
+	GameObject water = new GameObject(this, 25, height/2, 15, 15);
 	boolean hasWater = false;
 	// water.setTexture();
 	// or something
 	
-	GameObject bed = new GameObject(width/2 - 50/2, height/2 - 50/2, 50, 50);
+	GameObject bed = new GameObject(this, width/2 - 50/2, height/2 - 50/2, 50, 50);
 	
 	Wall[] walls = new Wall[4];
 	
@@ -49,8 +49,10 @@ public class GameHandler extends JPanel implements Runnable {
 	
 	public void initialize() {
 		this.setBackground(Color.black);
-		player = new Player(width/2, height/2, this);
-		// sm.initialize();
+		player = new Player(this, width/2, height/2);
+		eh = new EnemyHandler();
+		sm.initialize();
+		hasWater = false;
 	}
 
 	@Override
@@ -126,6 +128,12 @@ public class GameHandler extends JPanel implements Runnable {
 				initialize();
 				mh.mouseHeld = false;
 			}
+		} else if (s == Scene.WIN) {
+			if (mh.mouseHeld) {
+				sm.setScene(Scene.MENU);
+				initialize();
+				mh.mouseHeld = false;
+			}
 		}
 	}
 	
@@ -135,7 +143,7 @@ public class GameHandler extends JPanel implements Runnable {
 		
 		Graphics2D g = (Graphics2D) g_;
 		
-		sm.drawScene(this, g);
+		sm.drawScene(g);
 		
 		g.dispose();
 	}

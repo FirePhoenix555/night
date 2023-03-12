@@ -13,27 +13,23 @@ public class Player extends GameObject {
 	
 	public Flashlight f;
 	
-	private GameHandler g;
-	
-	public Player(int x_, int y_, GameHandler g_) {
-		super(x_, y_, 15, 15);
+	public Player(GameHandler gh_, int x_, int y_) {
+		super(gh_, x_, y_, 15, 15);
 		
-		g = g_;
+		f = new Flashlight(gh_, this, 0, 0);
 		
-		f = new Flashlight(this, 0, 0);
-		
-		t = new Timer(fps, g, this);
+		t = new Timer(fps, this);
 	}
 	
 	@Override
 	public void onTimer() {
-		move(g.kh.up, g.kh.left, g.kh.down, g.kh.right);
+		move(gh.kh.up, gh.kh.left, gh.kh.down, gh.kh.right);
 	}
 	
 	public void update() {
 		t.update();
 		
-		f.update(g.mh);
+		f.update();
 		
 		if (health <= 0) {
 			dead = true;
@@ -60,15 +56,15 @@ public class Player extends GameObject {
 		x += dx;
 		y += dy;
 		
-		for (Wall w : g.walls) {
-			if (w.intersects(this, g.sm)) {
+		for (Wall w : gh.walls) {
+			if (w.intersects(this, gh.sm)) {
 				x -= dx;
 				y -= dy;
 				
 				// If one direction is fine then do that first!
 				x += dx;
 				boolean t = true;
-				for (Wall w_ : g.walls) {
+				for (Wall w_ : gh.walls) {
 					if (w_.intersects(this)) t = false;
 				}
 				if (t) dx = 0;
@@ -76,7 +72,7 @@ public class Player extends GameObject {
 				
 				y += dy;
 				t = true;
-				for (Wall w_ : g.walls) {
+				for (Wall w_ : gh.walls) {
 					if (w_.intersects(this)) t = false;
 				}
 				if (t) dy = 0;

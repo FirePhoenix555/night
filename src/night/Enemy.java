@@ -10,8 +10,8 @@ public class Enemy extends GameObject {
 	
 	public boolean destroyed = false;
 	
-	public Enemy(int x_, int y_) {
-		super(x_, y_, 10, 10);
+	public Enemy(GameHandler gh_, int x_, int y_) {
+		super(gh_, x_, y_, 10, 10);
 	}
 	
 	private double[] seek(GameObject g) { // Moves directly toward the player
@@ -37,31 +37,31 @@ public class Enemy extends GameObject {
 //		y += dy;
 	}
 	
-	public void update(GameHandler g) {
+	public void update() {
 //		if (destroyed) return;
 		
-		double dx = Math.abs(g.player.x - x);
-		double dy = Math.abs(g.player.y - y);
+		double dx = Math.abs(gh.player.x - x);
+		double dy = Math.abs(gh.player.y - y);
 		
 		if (dx <= width && dy <= height) {
-			g.player.health -= dmg;
+			gh.player.health -= dmg;
 			destroy();
 			return;
 		}
 		
 		
 		
-		double[][] forces = new double[g.enemies.size() + 1][2];
+		double[][] forces = new double[gh.eh.enemies.size() + 1][2];
 		
 		
 
-		forces[0] = seek(g.player);
+		forces[0] = seek(gh.player);
 		
 		// we're going to deal w forces here
 		// seek() returns a force float[2]
 		
-		for (int i = 0; i < g.enemies.size(); i++) {
-			Enemy e = g.enemies.get(i);
+		for (int i = 0; i < gh.eh.enemies.size(); i++) {
+			Enemy e = gh.eh.enemies.get(i);
 			forces[i+1] = seek(e);
 		}
 		

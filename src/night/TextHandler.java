@@ -15,18 +15,18 @@ public class TextHandler extends GameObject {
 	
 	final private static float fps = 10f;
 	
-	public TextHandler(String t_, int x_, int y_, GameHandler g) {
-		super(x_, y_, 0, 0);
+	public TextHandler(GameHandler gh_, String t_, int x_, int y_) {
+		super(gh_, x_, y_, 0, 0);
 		
-		initialize(t_, x_, y_, g);
+		initialize(t_, x_, y_);
 	}
 	
-	public void initialize(String t_, int x_, int y_, GameHandler g) {
+	public void initialize(String t_, int x_, int y_) {
 		text = t_;
 		x = x_;
 		y = y_;
 		
-		t = new Timer(fps, g, this);
+		t = new Timer(fps, this);
 	}
 	
 	public void setColor(Color c_) {

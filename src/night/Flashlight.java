@@ -16,8 +16,8 @@ public class Flashlight extends GameObject {
 	
 	final public static float dmg = 0.3f;
 	
-	public Flashlight(Player owner_, int x_, int y_) {
-		super(x_, y_, minradius*2, minradius*2);
+	public Flashlight(GameHandler gh_, Player owner_, int x_, int y_) {
+		super(gh_, x_, y_, minradius*2, minradius*2);
 		
 //		owner = owner_;
 		radius = minradius;
@@ -51,9 +51,9 @@ public class Flashlight extends GameObject {
 		else if (radius > maxradius) radius = maxradius;
 	}
 	
-	public void update(MouseHandler mh) {
-		setPos(mh.x, mh.y);
-		on = mh.mouseHeld;
+	public void update() {
+		setPos(gh.mh.x, gh.mh.y);
+		on = gh.mh.mouseHeld;
 		
 		if (on) {
 			battery -= batteryUseSpeed;
@@ -61,7 +61,7 @@ public class Flashlight extends GameObject {
 				// radius = minradius;
 				on = false;
 				battery = 0;
-				mh.mouseHeld = false;
+				gh.mh.mouseHeld = false;
 				updateRadius(-2);
 				return;
 			}

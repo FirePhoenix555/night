@@ -2,18 +2,18 @@ package night;
 
 public class Timer {
 	private GameObject parent;
-	private GameHandler g;
+//	private GameHandler gh;
 	
 	private float fps;
 	private double updateInterval;
 	private double nextUpdateTime;
 	
-	public Timer(float fps_, GameHandler g_, GameObject p) {
+	public Timer(float fps_, GameObject p) {
 		fps = fps_;
 		updateInterval = 1000000000/fps;
 		nextUpdateTime = System.nanoTime() + updateInterval;
 		
-		g = g_;
+//		gh = g_;
 		parent = p;
 	}
 	
