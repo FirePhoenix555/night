@@ -117,7 +117,6 @@ public class GameHandler extends JPanel implements Runnable {
 				hasWater = true;
 			}
 			
-			
 		} else if (s == Scene.MENU) {
 			if (mh.mouseHeld) {
 				sm.setScene(Scene.T1);
