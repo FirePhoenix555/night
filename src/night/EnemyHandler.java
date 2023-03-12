@@ -19,7 +19,10 @@ public class EnemyHandler {
 	}
 	
 	void update(GameHandler g) {
-		if (!g.player.intersects(g.bed) && r.nextDouble() < spawnRate) {
+		Scene s = g.sm.getScene();
+		
+		boolean notInBed = s != Scene.BEDROOM || !g.player.intersects(g.bed); // either player is out of room or not in bed
+		if (notInBed && r.nextDouble() < spawnRate) {
 			// spawn new enemy
 			int[] pos = genPos(Math.max(g.width, g.height) * 1.25/2);
 			enemies.add(new Enemy(g, pos[0], pos[1]));
@@ -34,7 +37,7 @@ public class EnemyHandler {
 				e.health -= Flashlight.dmg;
 			}
 			
-			if (e.intersects(g.bed)) {
+			if (s == Scene.BEDROOM && e.intersects(g.bed)) {
 				e.destroyed = true;
 			}
 		}

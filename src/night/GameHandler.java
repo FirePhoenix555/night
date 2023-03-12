@@ -108,6 +108,7 @@ public class GameHandler extends JPanel implements Runnable {
 		if (s == Scene.BEDROOM) {
 			if (hasWater && player.intersects(bed)) {
 				sm.setScene(Scene.WIN);
+				bed = null;
 			}
 		} else if (s == Scene.KITCHEN) { 
 			// water.update();
