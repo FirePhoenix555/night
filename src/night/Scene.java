@@ -8,5 +8,6 @@ public enum Scene {
 	HALLWAY,
 	KITCHEN,
 	WIN,
+	T2,
 	LOSS
 }

@@ -129,11 +129,11 @@ public class GameHandler extends JPanel implements Runnable {
 				mh.mouseHeld = false;
 			}
 		} else if (s == Scene.WIN) {
-			if (mh.mouseHeld) {
-				sm.setScene(Scene.MENU);
-				initialize();
-				mh.mouseHeld = false;
-			}
+//			if (mh.mouseHeld) {
+//				sm.setScene(Scene.MENU);
+//				initialize();
+//				mh.mouseHeld = false;
+//			}
 		}
 	}
 	
