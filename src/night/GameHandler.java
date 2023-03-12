@@ -32,6 +32,8 @@ public class GameHandler extends JPanel implements Runnable {
 	
 	GameObject bed = new GameObject(width/2 - 50/2, height/2 - 50/2, 50, 50);
 	
+	Wall[] walls = new Wall[4];
+	
 	public GameHandler() {
 		setPreferredSize(new Dimension(width, height));
 		setDoubleBuffered(true);
@@ -91,6 +93,14 @@ public class GameHandler extends JPanel implements Runnable {
 				sm.setScene(Scene.LOSS);
 				return;
 			}
+			
+//			boolean t = false;
+//			for (Wall w : walls) {
+//				if (w.intersects(player)) {
+//					
+//				}
+//				
+//			}
 		}
 		if (s == Scene.BEDROOM) {
 			if (hasWater && player.intersects(bed)) {

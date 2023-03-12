@@ -31,7 +31,7 @@ public class SceneManager {
 	}
 	
 	public void initialize(GameHandler g_) {
-		currentScene = Scene.MENU;
+		currentScene = Scene.INTRO;
 		currentString = 0;
 		temptime = 0;
 		currentbg = 1;
@@ -42,6 +42,8 @@ public class SceneManager {
 	
 	public void setScene(Scene s) {
 		currentScene = s;
+		
+		setWalls(s);
 		
 		if (s == Scene.T1) {
 			temptime = System.nanoTime() + transitionTime;
@@ -59,13 +61,11 @@ public class SceneManager {
 	}
 	
 	public void drawScene(GameHandler gh, Graphics2D gp) {
-		
-		
 		if (currentScene == Scene.MENU) {
 			gh.setBackground(Color.white);
 			
 		} else if (currentScene == Scene.INTRO) {
-			drawRoom(Scene.BEDROOM, gh, gp);
+//			drawRoom(Scene.BEDROOM, gh, gp);
 			// do intro sequence
 			
 			if (gh.mh.mouseHeld) {
@@ -131,11 +131,36 @@ public class SceneManager {
 			gh.setBackground(Color.black);
 			
 			
+			for (Wall wall : gh.walls) {
+				if (wall != null) wall.draw(gp);
+			}
+//			gp.fillRect(0, 0, gh.width, 20);
+			
+			
 			
 		} else if (s == Scene.HALLWAY) {
 			
 		} else if (s == Scene.KITCHEN) {
 			gh.setBackground(Color.darkGray);
+		}
+	}
+	
+	private void setWalls(Scene s) {
+		if (!(s == Scene.BEDROOM || s == Scene.HALLWAY || s == Scene.KITCHEN)) {
+			for (Wall wall : g.walls) {
+				wall = null;
+			}
+			return;
+		}
+		
+		g.walls[0] = new Wall(0, 0, g.width, 20);
+		g.walls[1] = new Wall(0, g.height - 20, g.width, 20);
+		
+		if (s == Scene.BEDROOM) {
+			g.walls[2] = new Wall(0, 0, 20, g.height);
+			g.walls[2].setDoor(0, g.height/2 - 50/2, 20, 50, Scene.HALLWAY);
+			
+			g.walls[3] = new Wall(g.width - 20, 0, 20, g.height);
 		}
 	}
 }

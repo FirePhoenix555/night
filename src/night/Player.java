@@ -59,6 +59,53 @@ public class Player extends GameObject {
 		
 		x += dx;
 		y += dy;
+		
+		for (Wall w : g.walls) {
+			if (w.intersects(this, g.sm)) {
+				x -= dx;
+				y -= dy;
+				
+				// If one direction is fine then do that first!
+				x += dx;
+				boolean t = true;
+				for (Wall w_ : g.walls) {
+					if (w_.intersects(this)) t = false;
+				}
+				if (t) dx = 0;
+				else x -= dx;
+				
+				y += dy;
+				t = true;
+				for (Wall w_ : g.walls) {
+					if (w_.intersects(this)) t = false;
+				}
+				if (t) dy = 0;
+				else y -= dy;
+				
+				// stupid solution but works
+				// step forward 1 at a time until you intersect
+				if (dx != 0) dx /= Math.abs(dx); // = +- 1
+				if (dy != 0) dy /= Math.abs(dy); // = +- 1
+				while (!w.intersects(this)) {
+					x += dx;
+					y += dy;
+				}
+				x -= dx;
+				y -= dy;
+			}
+		}
+		
+//		if (x < 0 || x + width > g.width) {
+//			// off in horizontal direction
+//			if (x < 0) x = 0;
+//			else x = g.width;
+//		}
+//		
+//		if (y < 0 || y > g.height) {
+//			// off in vertical direction
+//			if (y < 0) y = 0;
+//			else y = g.height;
+//		}
 	}
 	
 	@Override

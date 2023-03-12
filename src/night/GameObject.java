@@ -34,7 +34,7 @@ public class GameObject {
 		// TODO
 	}
 	
-	public boolean intersects (GameObject g) {
+	public boolean intersects(GameObject g) {
 		
 		if (x > g.x + g.width || y > g.y + g.height || x + width < g.x || y + height < g.y) {
 			return false;
