@@ -1,5 +1,6 @@
 package night;
 
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -11,6 +12,8 @@ public class SceneManager {
 	final private static float transitionTime = 1000000000/250f;
 	private double temptime;
 	private float currentbg;
+	private float currentFadeIn = 0;
+	private boolean playerFadedIn = false;
 	
 	final private static String[] introSequence = new String[] {
 			"This is you.",
@@ -34,6 +37,8 @@ public class SceneManager {
 	
 	private TextHandler t;
 	
+	final private static int[] textLocation = new int[] {400, 250};
+	
 	private GameHandler gh;
 	
 	public SceneManager(GameHandler g_) {
@@ -45,8 +50,10 @@ public class SceneManager {
 		currentString = 0;
 		temptime = 0;
 		currentbg = 1;
+		currentFadeIn = 0;
+		playerFadedIn = false;
 		transitioning = false;
-		t = new TextHandler(gh, "", 0, 0);
+		t = new TextHandler(gh, "", textLocation[0], textLocation[1]);
 		
 		setScene(Scene.MENU);
 	}
@@ -71,11 +78,13 @@ public class SceneManager {
 		}
 		if (s == Scene.INTRO) {
 			currentString = 0;
-			t = new TextHandler(gh, "", 0, 0);
+			currentFadeIn = 0;
+			playerFadedIn = false;
+			t = new TextHandler(gh, "", textLocation[0], textLocation[1]);
 		}
 		if (s == Scene.WIN) {
 			currentString = 0;
-			t = new TextHandler(gh, "", 0, 0);
+			t = new TextHandler(gh, "", textLocation[0], textLocation[1]);
 		}
 		if (s == Scene.T2) {
 			temptime = System.nanoTime() + transitionTime;
@@ -95,6 +104,24 @@ public class SceneManager {
 			
 		} else if (currentScene == Scene.INTRO) {
 //			drawRoom(Scene.BEDROOM, gh, gp);
+			
+			if (!playerFadedIn && currentFadeIn <= 1) {
+				// make the player transparent
+			    g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, currentFadeIn));
+			    
+				gh.player.drawCharacter(g);
+				
+				// set transparency back
+			    g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+			    
+			    currentFadeIn += 0.05;
+			    
+			    if (currentFadeIn >= 1) {
+			    	currentFadeIn = 0;
+			    	playerFadedIn = true;
+			    }
+			} else gh.player.drawCharacter(g);
+			
 			// do intro sequence
 			
 			if (gh.mh.mouseHeld) {
@@ -110,7 +137,7 @@ public class SceneManager {
 			}
 			
 			if (!t.text.equals(introSequence[currentString])) {
-				t = new TextHandler(gh, introSequence[currentString], gh.width/2, gh.height/2);
+				t = new TextHandler(gh, introSequence[currentString], textLocation[0], textLocation[1]);
 				t.setColor(Color.white);
 				t.setFont(new Font("Courier New", Font.PLAIN, 15));
 			}
@@ -158,7 +185,7 @@ public class SceneManager {
 			}
 			if (currentString < winSequence.length) {
 				if (!t.text.equals(winSequence[currentString])) {
-					t = new TextHandler(gh, winSequence[currentString], gh.width/2, gh.height/2);
+					t = new TextHandler(gh, winSequence[currentString], textLocation[0], textLocation[1]);
 					t.setColor(Color.black);
 					t.setFont(new Font("Courier New", Font.PLAIN, 15));
 				}

@@ -106,11 +106,19 @@ public class Player extends GameObject {
 	
 	@Override
 	public void draw(Graphics2D g) {
-		g.setColor(Color.red);
-		g.fillRect(x, y, width, height);
+		drawCharacter(g);
 		
 		f.draw(g);
 		
+		drawHealthBar(g);
+	}
+	
+	public void drawCharacter(Graphics2D g) {
+		g.setColor(Color.red);
+		g.fillRect(x, y, width, height);
+	}
+	
+	private void drawHealthBar(Graphics2D g) {
 		g.setColor(Color.red);
 		g.drawRect(5, 5, 200, 20);
 		g.fillRect(5, 5, (int) (health * 200), 20);
