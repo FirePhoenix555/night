@@ -8,15 +8,17 @@ import java.awt.Graphics2D;
 public class SceneManager {
 	private Scene currentScene;
 	
-	private boolean transitioning;
+	private boolean transitioning = false;
 	final private static float transitionTime = 1000000000/250f;
 	private double temptime;
 	private float currentbg;
 	private float currentFadeIn = 0;
-	private boolean playerFadedIn = false;
+//	private boolean playerFadedIn = false;
+//	private boolean roomFadedIn = false;
 	
 	final private static String[] introSequence = new String[] {
 			"This is you.",
+			"And this is your room.",
 			"Hello.",
 			"Testing.",
 			"Aaaaaaaaaaaaaa aaaaaaaaaaaa aaaaaaaaaaaaaaaaa.",
@@ -51,7 +53,7 @@ public class SceneManager {
 		temptime = 0;
 		currentbg = 1;
 		currentFadeIn = 0;
-		playerFadedIn = false;
+//		playerFadedIn = false;
 		transitioning = false;
 		t = new TextHandler(gh, "", textLocation[0], textLocation[1]);
 		
@@ -73,13 +75,16 @@ public class SceneManager {
 		
 		if (s == Scene.T1) {
 			temptime = System.nanoTime() + transitionTime;
-			transitioning = true;
+//			transitioning = true;
 //			System.out.println(currentbg);
 		}
 		if (s == Scene.INTRO) {
+			setWalls(Scene.BEDROOM);
 			currentString = 0;
 			currentFadeIn = 0;
-			playerFadedIn = false;
+//			playerFadedIn = false;
+//			roomFadedIn = false;
+			transitioning = true; // because the first string has a transition
 			t = new TextHandler(gh, "", textLocation[0], textLocation[1]);
 		}
 		if (s == Scene.WIN) {
@@ -88,7 +93,7 @@ public class SceneManager {
 		}
 		if (s == Scene.T2) {
 			temptime = System.nanoTime() + transitionTime;
-			transitioning = true;
+//			transitioning = true;
 		}
 		
 		gh.eh.destroyAll();
@@ -105,7 +110,29 @@ public class SceneManager {
 		} else if (currentScene == Scene.INTRO) {
 //			drawRoom(Scene.BEDROOM, gh, gp);
 			
-			if (!playerFadedIn && currentFadeIn <= 1) {
+			
+			if (currentString == 1 && transitioning && currentFadeIn <= 1) {
+			    g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, currentFadeIn));
+			    
+				drawRoom(Scene.BEDROOM, g);
+				gh.bed.draw(g);
+				
+				// set transparency back
+			    g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+			    
+			    currentFadeIn += 0.05;
+			    
+			    if (currentFadeIn >= 1) {
+			    	currentFadeIn = 0;
+//			    	roomFadedIn = true;
+			    	transitioning = false;
+			    }
+			} else if (currentString >= 1) {
+				drawRoom(Scene.BEDROOM, g);
+				gh.bed.draw(g);
+			}
+			
+			if (currentString == 0 && transitioning && currentFadeIn <= 1) {
 				// make the player transparent
 			    g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, currentFadeIn));
 			    
@@ -118,7 +145,8 @@ public class SceneManager {
 			    
 			    if (currentFadeIn >= 1) {
 			    	currentFadeIn = 0;
-			    	playerFadedIn = true;
+//			    	playerFadedIn = true;
+			    	transitioning = false;
 			    }
 			} else gh.player.drawCharacter(g);
 			
@@ -127,6 +155,13 @@ public class SceneManager {
 			if (gh.mh.mouseHeld) {
 				currentString++;
 				gh.mh.mouseHeld = false;
+				currentFadeIn = 0;
+				if (currentString == 1) transitioning = true; // playerFadedIn = true;
+				else if (currentString == 2) transitioning = false; // roomFadedIn = true;
+				
+//				if (currentString == 1) {
+//					currentFadeIn = 0;
+//				}
 				
 				if (currentString >= introSequence.length) {
 					setScene(Scene.BEDROOM);
@@ -201,7 +236,7 @@ public class SceneManager {
 				currentbg -= 1/255f;
 				if (currentbg <= 0) {
 					setScene(Scene.INTRO);
-					transitioning = false;
+//					transitioning = false;
 					return;
 				}
 			}
